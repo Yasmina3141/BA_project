@@ -9,7 +9,7 @@
 #define ECG_VECTOR_SIZE 15000//dim
 #endif
 
-#define SUBJECT 4
+#define SUBJECT 0
 
 
 #if SUBJECT==1
