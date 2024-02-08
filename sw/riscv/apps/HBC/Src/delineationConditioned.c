@@ -175,7 +175,7 @@ void classifyBeatECG()  {
 
         for(int32_t lead=0; lead<NLEADS; lead++) {
             for(int32_t i=overlap; i<dim; i++) {
-                ecg_buff[i + dim*lead] = ecg_3l[rWindow*dim + i - tot_overlap][lead];
+                ecg_buff[i + dim*lead] = 0; //ecg_3l[rWindow*dim + i - tot_overlap][lead];
             }
         }
 
