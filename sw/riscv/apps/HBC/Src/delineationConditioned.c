@@ -9,8 +9,6 @@
 #include "profiling/profile.h"
 // #include "profiling/defines.h"
 
-#include "data/signal_250_3leads.h"
-
 #include <stdio.h>
 
 
@@ -173,9 +171,12 @@ void classifyBeatECG()  {
             }
         }
 
-        for(int32_t lead=0; lead<NLEADS; lead++) {
-            for(int32_t i=overlap; i<dim; i++) {
-                ecg_buff[i + dim*lead] = 0; //ecg_3l[rWindow*dim + i - tot_overlap][lead];
+        /**
+         * The data is always read in timelime order with ascending lead count
+         */
+        for(int32_t i=overlap; i<dim; i++) {
+            for(int32_t lead=0; lead<NLEADS; lead++) {
+                read_vadc_dma( &ecg_buff[i + dim*lead] , sizeof(uint16_t) );
             }
         }
 

@@ -9,6 +9,9 @@
 #include "peakDetection.h"
 #include "relativeEnergy.h"
 
+#include "vadc.h"
+#include "../definitions.h"
+
 #define FPSIZE 9 // It's included the R peak but it is always detected and the index from the beginning of the signal will be computed. Change this depending on your needs
 
 extern uint16_t fiducial_point_code[FPSIZE];
