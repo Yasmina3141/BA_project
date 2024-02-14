@@ -21,9 +21,9 @@ int main(int argc, char *argv[])
     vadc_init();
 
     // Run the heart beat classifier application
-    printf("Start\n");
+    printf("Start HBC\n");
     classifyBeatECG();
-    printf("Done\n");
+    printf("Finished HBC\n");
 
     // Stops the transaction
     vadc_deinit();

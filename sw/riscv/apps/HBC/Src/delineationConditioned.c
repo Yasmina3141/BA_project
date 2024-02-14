@@ -155,6 +155,8 @@ void classifyBeatECG()  {
 
     clearRelEn();
 
+    printf("Number of windows: %d\n", N_WINDOWS);
+
     for(rWindow=0; rWindow<N_WINDOWS; rWindow++)
     {
         printf("Win #%d\n", rWindow);
@@ -176,7 +178,7 @@ void classifyBeatECG()  {
          */
         for(int32_t i=overlap; i<dim; i++) {
             for(int32_t lead=0; lead<NLEADS; lead++) {
-                read_vadc_dma( &ecg_buff[i + dim*lead] , sizeof(uint16_t) );
+                read_vadc_dma( &ecg_buff[i + dim*lead] , sizeof(*ecg_buff) );
             }
         }
 
@@ -371,4 +373,5 @@ void classifyBeatECG()  {
         }
 
     }
+    return;
 }

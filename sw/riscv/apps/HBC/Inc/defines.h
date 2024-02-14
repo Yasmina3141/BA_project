@@ -62,7 +62,7 @@
 
 //======== DEFINE WINDOWS (ONLY FOR DEBUG) ==========//
 // #define ONLY_FIRST_WINDOW
-#define ONLY_TWO_WINDOW
+// #define ONLY_TWO_WINDOW
 // #define DEBUG_FIRST_MODULES
 
 #define N 8
