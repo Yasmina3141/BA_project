@@ -8,7 +8,8 @@
 #include <stdlib.h>
 
 #include "perf.h"
-#include "delineationConditioned.h"
+#include "definitions.h"
+#include "hdr/delineationConditioned.h"
 
 int main(int argc, char *argv[])
 {
