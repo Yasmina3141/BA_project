@@ -236,7 +236,7 @@ static inline void set_dma_vadc_config();
 /**
  * Set the DMA to transfer data comming form the virtual ADC
  */
-static inline void set_vadc_dma_transaction(uint32_t *data, uint32_t byte_count);
+static inline void set_vadc_dma_transaction(uint32_t *data, uint32_t byte_count, uint32_t byte_stride, uint32_t data_type);
 
 /**
  * The header of every virtual ADC transaction:
@@ -456,6 +456,16 @@ void vadc_deinit(){
 
 void launch_vadc(uint32_t *data_buffer, uint32_t byte_count)
 {
+    // Set the data type different than 4 bytes only if 2 or 1 byte is transmited
+    uint32_t data_type = 0; // uint32_t
+    if(byte_count == 2) data_type = 1; // uint16_t
+    else if (byte_count == 1) data_type == 2; // uint8_t
+
+    // Start DMA transaction
+    // Setting the DMA
+    vadc_cb.dma_intr_flag = 0;
+    set_vadc_dma_transaction(data_buffer, byte_count, 4, data_type);
+
     // Start SPI transaction to receive data
     vadc_spi_cmds.read_data_spi_cmd = spi_create_command((spi_command_t){
         .len        = byte_count - 1,
@@ -466,9 +476,10 @@ void launch_vadc(uint32_t *data_buffer, uint32_t byte_count)
     spi_set_command(&vadc_cb.spi_host_vadc, vadc_spi_cmds.read_data_spi_cmd);
     spi_wait_for_ready(&vadc_cb.spi_host_vadc);
 
-    // Start DMA transaction
-    // Setting the DMA
-    set_vadc_dma_transaction(data_buffer, byte_count);
+    // Wait for virtual ADC transaction to be completed
+    while(vadc_cb.dma_intr_flag == 0) {
+        wait_for_interrupt();
+    }
 }
 
 uint32_t set_vadc_clk(uint32_t target_freq, clk_round_t round_type){
@@ -642,15 +653,14 @@ static inline void set_dma_vadc_config(){
     vadc_cb.dma.base_addr = mmio_region_from_addr((uintptr_t)DMA_START_ADDRESS);
 }
 
-static inline void set_vadc_dma_transaction(uint32_t *data, uint32_t byte_count){
+static inline void set_vadc_dma_transaction(uint32_t *data, uint32_t byte_count, uint32_t byte_stride, uint32_t data_type){
     uint32_t *fifo_ptr_rx = vadc_cb.spi_host_vadc.base_addr.base + SPI_HOST_RXDATA_REG_OFFSET;
     dma_set_read_ptr_inc(&vadc_cb.dma, (uint32_t) 0);
-    dma_set_write_ptr_inc(&vadc_cb.dma, (uint32_t) 4);
+    dma_set_write_ptr_inc(&vadc_cb.dma, byte_stride);
     dma_set_read_ptr(&vadc_cb.dma, (uint32_t) fifo_ptr_rx);
     dma_set_write_ptr(&vadc_cb.dma, (uint32_t) data);
     dma_set_spi_mode(&vadc_cb.dma, (uint32_t) 1);
-    dma_set_data_type(&vadc_cb.dma, (uint32_t) 0);
-    vadc_cb.dma_intr_flag = 0;
+    dma_set_data_type(&vadc_cb.dma, data_type);
     dma_set_cnt_start(&vadc_cb.dma, byte_count);
 }
 

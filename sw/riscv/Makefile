@@ -37,6 +37,10 @@ INC_FOLDERS        += $(sort $(dir $(wildcard lib/sdk/*/)))
 INC_FOLDERS        += $(sort $(dir $(wildcard lib/runtime/)))
 INC_FOLDERS_GCC    = $(addprefix -I ,$(INC_FOLDERS))
 
+# Heart Beat Classifier
+LIB_DRIVERS        += $(wildcard apps/HBC/*/*.c)
+INC_FOLDERS        += $(sort $(dir $(wildcard apps/HBC/*/)))
+
 %.bin: %.elf
 	$(RISCV_EXE_PREFIX)objcopy -O binary $< $@
 
@@ -168,6 +172,22 @@ apps/vadc_example/vadc_example.elf: apps/vadc_example/vadc_example.c
 		$(LIB_BASE) \
 		$(LIB_DRIVERS) \
 		-Wl,-Map=apps/vadc_example/vadc_example.map \
+		-L $(RISCV)/riscv32-unknown-elf/lib \
+		-lc -lm -lgcc -flto -ffunction-sections -fdata-sections -specs=nano.specs
+
+apps/HBC/HBC.elf: apps/HBC/HBC.c
+	$(RISCV_EXE_PREFIX)gcc -march=rv32imc -o $@ -w -Os -g -nostdlib \
+		$(CUSTOM_GCC_FLAGS) \
+		-DHOST_BUILD \
+		-T link/link.ld \
+		-I $(RISCV)/riscv32-unknown-elf/include \
+		$(INC_FOLDERS_GCC) \
+		-static \
+		$(LIB_CRT) \
+		$^ $(LIB_RUNTIME) \
+		$(LIB_BASE) \
+		$(LIB_DRIVERS) \
+		-Wl,-Map=apps/HBC/HBC.map \
 		-L $(RISCV)/riscv32-unknown-elf/lib \
 		-lc -lm -lgcc -flto -ffunction-sections -fdata-sections -specs=nano.specs
 
