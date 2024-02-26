@@ -160,7 +160,7 @@ void classifyBeatECG()  {
     for(rWindow=0; rWindow<N_WINDOWS; rWindow++)
     {
         printf("Win #%d\n", rWindow);
-        
+
 #ifdef HWPERF_FULL
         profile_start();
 #endif
@@ -178,7 +178,7 @@ void classifyBeatECG()  {
          */
         for(int32_t i=overlap; i<dim; i++) {
             for(int32_t lead=0; lead<NLEADS; lead++) {
-                read_vadc_dma( &ecg_buff[i + dim*lead] , sizeof(*ecg_buff) );
+                launch_vadc( &ecg_buff[i + dim*lead] , sizeof(*ecg_buff) );
             }
         }
 
@@ -208,7 +208,7 @@ void classifyBeatECG()  {
         filterWindows(arg);
 
     #ifdef HWPERF_MODULES
-        profile_stop(); 
+        profile_stop();
     #endif
 
     #ifdef PRINT_SIG_MF
@@ -298,7 +298,7 @@ void classifyBeatECG()  {
           printf("%d %d\n", indicesRpeaks[indR], indicesBeatClasses[indR]);
         }
     #endif
-    
+
     #ifdef PRINT_RESULT
         if(flag_abnBeat)
 	    printf("Window %d: ABNORMAL_BEAT!\n", rWindow);
