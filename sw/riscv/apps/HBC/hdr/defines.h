@@ -1,5 +1,5 @@
 #ifndef DEFINES_H_
-#define DEFINES_H_ 
+#define DEFINES_H_
 
 //#include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +8,7 @@
 // #include "pmsis.h"
 
 // Define PI_L2 as empty if your platform does not require specific memory placement
-#define PI_L2 
+#define PI_L2
 
 #define PRINT_RESULT
 // #define PRINT_RELEN
@@ -31,7 +31,7 @@
 #define ECG_SAMPLING_FREQUENCY 250
 
 //=========== Number of leads/channels ============//
-#define NLEADS 3
+#define NLEADS 2
 #define RMS_NLEADS				NLEADS
 
 //=========== Buffer size for R peak detection ========== //
@@ -73,7 +73,7 @@
 //========= DEFINE PROFILING ================//
 //#define HWPERF_MODULES	//start profiling separate modules
 //#define HWPERF_1L       	//start profiling step 1 app
-//#define HWPERF_3L        	//start profiling step 2 app if any 
+//#define HWPERF_3L        	//start profiling step 2 app if any
 //#define HWPERF_FULL	//start profiling full app (N.B. it will profile also some buffering)
 
 // --- CHOOSE TYPE OF PROFILING ---
@@ -82,13 +82,13 @@
 //#define INTACC		//# of loads and stores in INT memory (L1)
 //#define STALL			//# number of core stalls
 //#define INSTRUCTION	//# number of instructions
-//#define TCDM			//# of conflicts in TCDM (L1 memory) between cores 
-//#define JUMPS         //# of unconditional jumps 
+//#define TCDM			//# of conflicts in TCDM (L1 memory) between cores
+//#define JUMPS         //# of unconditional jumps
 //#define BRANCHES      //# of branches (taken + not taken)
 //#define TAKEN_BRANCHES //# of branches taken
 
 
-#define MUL 
+#define MUL
 #define SCALE 100//6//		64
 
 #endif

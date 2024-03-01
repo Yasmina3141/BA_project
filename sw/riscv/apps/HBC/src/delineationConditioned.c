@@ -27,6 +27,8 @@ PI_L2 int32_t buffSize_MF_RMS;
 PI_L2 int32_t flag_prevWindAB;
 PI_L2 int32_t rWindow;
 
+static uint8_t fake_annotations[] = {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0};
+
 
 void clearRelEn() {
     clearAndResetRelEn();
@@ -155,12 +157,10 @@ void classifyBeatECG()  {
 
     clearRelEn();
 
-    printf("Number of windows: %d\n", N_WINDOWS);
+    printf("Number of windows: %d, Window size: %d\n", N_WINDOWS, dim);
 
     for(rWindow=0; rWindow<N_WINDOWS; rWindow++)
     {
-        printf("Win #%d\n", rWindow);
-
 #ifdef HWPERF_FULL
         profile_start();
 #endif
@@ -295,15 +295,13 @@ void classifyBeatECG()  {
 
     #ifdef PRINT_BEATCLASS
         for(int32_t indR=0; indR<rpeaks_counter; indR++) {
-          printf("%d %d\n", indicesRpeaks[indR], indicesBeatClasses[indR]);
+            printf("%d %d\n", indicesRpeaks[indR], indicesBeatClasses[indR]);
         }
     #endif
 
     #ifdef PRINT_RESULT
-        if(flag_abnBeat)
-	    printf("Window %d: ABNORMAL_BEAT!\n", rWindow);
-	else
-	    printf("Window %d: BIEN!\n", rWindow);
+        printf("%d, %d, %d\n", rWindow, fake_annotations[rWindow], overlap );
+        // printf("%d, %d, %d\n", rWindow, flag_abnBeat, overlap );
     #endif
 
 #endif // MODULE_BEATCLASS
